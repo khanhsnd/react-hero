@@ -4,6 +4,8 @@ import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import styles from "./main.module.css";
+import LeftMenu from '@/component/menu';
 type MainLayoutProps = {
     children: React.ReactNode;
 };
@@ -40,7 +42,7 @@ function MainLayout(props: MainLayoutProps) {
     return (
         <Layout>
             <Header style={{ display: 'flex', alignItems: 'center' }}>
-                <div className="demo-logo" />
+                <div className={styles.demologo} />
                 <Menu
                     theme="dark"
                     mode="horizontal"
@@ -51,13 +53,7 @@ function MainLayout(props: MainLayoutProps) {
             </Header>
             <Layout>
                 <Sider width={200} style={{ background: colorBgContainer }}>
-                    <Menu
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        defaultOpenKeys={['sub1']}
-                        style={{ height: '100%', borderRight: 0 }}
-                        items={items2}
-                    />
+                    <LeftMenu />
                 </Sider>
                 <Layout style={{ padding: '0 24px 24px' }}>
                     <Breadcrumb style={{ margin: '16px 0' }}>
