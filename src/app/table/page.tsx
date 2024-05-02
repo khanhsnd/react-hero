@@ -1,5 +1,5 @@
 'use client'
-import { Button, Form, GetProp, Input, Table, TableProps } from "antd";
+import { Button, Form, GetProp, Input, Select, Space, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import qs from "qs";
 import styled from "styled-components";
@@ -28,28 +28,7 @@ interface TableParams {
     sortOrder?: string;
     filters?: Parameters<GetProp<TableProps, 'onChange'>>[1];
 }
-const columns: ColumnsType<DataType> = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        sorter: true,
-        render: (name) => `${name.first} ${name.last}`,
-        width: '20%',
-    },
-    {
-        title: 'Gender',
-        dataIndex: 'gender',
-        filters: [
-            { text: 'Male', value: 'male' },
-            { text: 'Female', value: 'female' },
-        ],
-        width: '20%',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-];
+
 const getRandomuserParams = (params: TableParams) => ({
     results: params.pagination?.pageSize,
     page: params.pagination?.current,
@@ -59,6 +38,39 @@ const getRandomuserParams = (params: TableParams) => ({
 const List = () => {
     const [data, setData] = useState<DataType[]>();
     const [loading, setLoading] = useState(false);
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            sorter: true,
+            render: (name) => `${name.first} ${name.last}`,
+            width: '20%',
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            filters: [
+                { text: 'Male', value: 'male' },
+                { text: 'Female', value: 'female' },
+            ],
+            width: '20%',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+        },
+        {
+            title: 'Action',
+            render: (_, record) => {
+                return (
+                    <Space size="middle">
+                        <a onClick={() => showModal(record)}>Edit</a>
+                        <a>Delete</a>
+                    </Space>
+                )
+            }
+        }
+    ];
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
@@ -101,8 +113,14 @@ const List = () => {
             setData([]);
         }
     };
-    const showModal = () => {
+    const showModal = (record?: DataType) => {
+
         setIsOpenModal(true);
+        if (record) {
+            form.setFieldsValue(
+                { name: `${record.name.first} ${record.name.last}`, email: record.email, gender: record.gender }
+            )
+        }
     }
     const handleCloseModal = () => {
         setIsOpenModal(false);
@@ -113,7 +131,7 @@ const List = () => {
     }
     return (
         <Container>
-            <Button className="mgb-10" type="primary" onClick={showModal}>Primary Button</Button>
+            <Button className="mgb-10" type="primary" onClick={() => showModal()}>Primary Button</Button>
             <Table
                 columns={columns}
                 rowKey={(record) => record.login.uuid}
@@ -129,11 +147,27 @@ const List = () => {
                     autoComplete="off"
                 >
                     <Form.Item
-                        name="url"
-                        label="URL"
-                        rules={[{ required: true }, { type: 'url', warningOnly: true }, { type: 'string', min: 6 }]}
+                        name="name"
+                        label="Name"
+                        rules={[{ required: true }, { type: 'string' }]}
                     >
-                        <Input placeholder="input placeholder" />
+                        <Input placeholder="Name" />
+                    </Form.Item>
+                    <Form.Item
+                        name="gender"
+                        label="Gender"
+                    >
+                        <Select>
+                            <Select.Option value="male">Male</Select.Option>
+                            <Select.Option value="female">Female</Select.Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        name="email"
+                        label="Email"
+                        rules={[{ required: true }, { type: 'string' }, { type: 'email', warningOnly: true }]}
+                    >
+                        <Input placeholder="Email" />
                     </Form.Item>
                 </Form>
             </WrapModal>
