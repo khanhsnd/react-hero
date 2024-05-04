@@ -6,6 +6,7 @@ import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import styles from "./main.module.css";
 import LeftMenu from '@/component/menu';
+import { usePathname } from 'next/navigation';
 type MainLayoutProps = {
     children: React.ReactNode;
 };
@@ -39,6 +40,12 @@ function MainLayout(props: MainLayoutProps) {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+    const pathname = usePathname();
+    const isLoginPage = pathname === '/login'; // Adjust the path as needed
+
+    if (isLoginPage) {
+        return <>{children}</>;
+    }
     return (
         <Layout>
             <Header style={{ display: 'flex', alignItems: 'center' }}>
