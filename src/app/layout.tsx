@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MainLayout from "./layout/MainLayout";
-
+import { Provider } from 'react-redux';
+import store from "@/lib/rtk/store";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,14 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StyledComponentsRegistry>
-          <AntdRegistry>
-            <MainLayout>
-              {children}
-            </MainLayout>
-
-          </AntdRegistry>
-        </StyledComponentsRegistry>
+        <Provider store={store}>
+          <StyledComponentsRegistry>
+            <AntdRegistry>
+              <MainLayout>
+                {children}
+              </MainLayout>
+            </AntdRegistry>
+          </StyledComponentsRegistry>
+        </Provider>
       </body>
     </html>
   );
