@@ -2,10 +2,10 @@ import StyledComponentsRegistry from "@/lib/registry";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Provider } from 'react-redux';
 import "./globals.css";
 import MainLayout from "./layout/MainLayout";
-import { Provider } from 'react-redux';
-import store from "@/lib/rtk/store";
+import { Providers } from "@/component/provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,15 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Provider store={store}>
+        <Providers>
           <StyledComponentsRegistry>
             <AntdRegistry>
+
               <MainLayout>
                 {children}
               </MainLayout>
+
             </AntdRegistry>
           </StyledComponentsRegistry>
-        </Provider>
+        </Providers>
       </body>
     </html>
   );

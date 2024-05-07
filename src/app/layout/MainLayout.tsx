@@ -1,5 +1,4 @@
-'use client';
-
+'use client'
 import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -7,6 +6,7 @@ import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import styles from "./main.module.css";
 import LeftMenu from '@/component/menu';
 import { usePathname } from 'next/navigation';
+import withAuth from '@/component/withAuth';
 type MainLayoutProps = {
     children: React.ReactNode;
 };
@@ -84,4 +84,4 @@ function MainLayout(props: MainLayoutProps) {
         </Layout>
     )
 }
-export default MainLayout
+export default withAuth(MainLayout) 
