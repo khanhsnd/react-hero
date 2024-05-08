@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
 
 interface AuthState {
-    token: string | null
+    token: string | null | undefined
 }
 
 const initialState: AuthState = {
@@ -14,12 +14,12 @@ const authSliceReducer = createSlice({
     initialState,
     reducers: {
         // nhận vào các function, các function có 2 tham số là state, và action, action có 2 props là payload và type
-        setToken: (state, action: PayloadAction<string>) => {
+        setToken: (state, action: PayloadAction<string | null | undefined>) => {
             state.token = action.payload;
             if (action.payload) {
                 setCookie('token', action.payload);
             } else {
-                deleteCookie('authToken');
+                deleteCookie('token');
             }
         },
     }

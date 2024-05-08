@@ -1,4 +1,4 @@
-// import { setAuthenticated } from '@/lib/rtk/slice/authReducer';
+import { setToken } from '@/lib/rtk/slice/authSlice';
 import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -7,19 +7,23 @@ import { useDispatch, useSelector } from 'react-redux';
 const withAuth = <P extends object>(WrappedComponent: React.ComponentType<P>) => {
     const AuthComponent = (props: P) => {
         const router = useRouter();
-        const isAuthenticated = useSelector((state: any) => state.auth.isAuthenticated);
+        const token = useSelector((state: any) => {
+            console.log(state)
+            return state.auth.token
+        });
         const dispatch = useDispatch();
 
         useEffect(() => {
-            const authToken = getCookie('isAuthenticated');
-            // dispatch(setAuthenticated(!!authToken));
+            const authToken = getCookie('token');
+            dispatch(setToken(authToken?.toString()));
         }, [dispatch]);
 
         useEffect(() => {
-            if (!isAuthenticated) {
+            debugger
+            if (!token) {
                 router.push('/login');
             }
-        }, [isAuthenticated, router]);
+        }, [router]);
 
         return <WrappedComponent {...props} />;
     };

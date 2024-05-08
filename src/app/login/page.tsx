@@ -1,8 +1,10 @@
 'use client';
 import { Container } from "@/component/container";
+import { setToken } from "@/lib/rtk/slice/authSlice";
 import { Button, Checkbox, Form, FormProps, Input } from "antd";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 type FieldType = {
     username: string;
     password: string;
@@ -13,9 +15,11 @@ const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
 };
 const Login = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const router = useRouter()
+    const router = useRouter();
+    const dispatch = useDispatch();
     const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
         setIsLoading(true);
+        dispatch(setToken(null))
         console.log('Success:', values);
         router.push('/');
     }
